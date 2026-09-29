@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A Limited Infinity · Avery Lake</title>
+<meta name="description" content="A Limited Infinity, Avery Lake, 2026. A finite alphabet unfolds through an endless sequence from one fixed beginning. Find when a word or name arrives.">
+<meta name="author" content="Avery Lake">
+<link rel="canonical" href="https://infinity.averylake.art/">
+<meta property="og:type" content="website"><meta property="og:title" content="A Limited Infinity · Avery Lake"><meta property="og:description" content="A finite alphabet. An endless sequence. Find when a word or name arrives."><meta property="og:url" content="https://infinity.averylake.art/"><meta property="og:image" content="https://infinity.averylake.art/social.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="A Limited Infinity · Avery Lake"><meta name="twitter:image" content="https://infinity.averylake.art/social.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f7f6f2'/%3E%3Ctext x='16' y='22' font-family='Courier New,monospace' font-size='18' text-anchor='middle' fill='%23222'%3EA%3C/text%3E%3C/svg%3E">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f6f2;color:#222;font-family:Arial,sans-serif;overflow:hidden}header{position:absolute;z-index:2;top:28px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:start;font-size:11px;letter-spacing:.08em}h1{font-size:12px;font-weight:400;margin:0 0 8px}small{font-size:10px;color:#888}canvas{display:block;width:100vw;height:100vh;touch-action:none}footer{position:absolute;bottom:0;left:0;right:0;padding:25px 32px;background:linear-gradient(transparent,#f7f6f2 30%);font-size:10px;color:#777}.bar{display:flex;gap:18px;align-items:center;margin-bottom:18px}button{font:inherit;color:inherit;border:0;background:none;padding:10px 0;cursor:pointer}button:hover{color:#111}input{flex:1;min-width:40px;accent-color:#777}#time{min-width:170px;text-align:right}details{max-width:530px;line-height:1.6}summary{cursor:pointer;list-style:none}details p{margin-bottom:0}#state{font-size:10px;color:#888}@media(max-width:600px){header{left:20px;right:20px}footer{padding:20px}.bar{gap:12px;flex-wrap:wrap}#time{width:100%;text-align:left}details{font-size:10px}}
+
+.finder{margin:0 0 14px;border-top:1px solid #deddd8;padding-top:12px;max-width:620px}.finder form{display:flex;align-items:center;gap:14px}.finder input{font:12px Arial,sans-serif;border:0;border-bottom:1px solid #ccc;background:transparent;padding:9px 0;color:#222;width:100%;outline-offset:4px}.finder label{white-space:nowrap}.finder p{line-height:1.6;margin:7px 0}.actions{display:flex;gap:20px;flex-wrap:wrap}button:disabled{opacity:.4;cursor:default}#result[hidden]{display:none}#wordDate{color:#333}footer{max-height:62vh;overflow:auto;background:linear-gradient(transparent,#f7f6f2 18px);padding-top:28px}#wordNote{color:#777}.hint{font-size:9px;color:#888}
+
+dialog{background:#f7f6f2;color:#222;border:1px solid #d8d7d2;padding:28px;width:min(440px,90vw);font:12px/1.6 Arial,sans-serif}dialog::backdrop{background:rgba(247,246,242,.8)}dialog h2{font-size:14px;font-weight:400;margin-top:0}dialog input{width:100%;padding:10px;border:1px solid #ccc;background:transparent;color:#222;font:inherit}dialog .date-actions{display:flex;justify-content:space-between;gap:20px;margin-top:15px}#dateMessage{min-height:2em;color:#666}#dateHelp{color:#777;font-size:11px}
+</style>
+<header><div><h1>A LIMITED INFINITY</h1><small>Avery Lake · companion</small></div><div id="state">PRESENT</div></header>
+<canvas aria-label="An unfolding field of letters. Use the timeline or arrow keys to revisit earlier moments."></canvas>
+<footer><section class="finder"><form id="findForm"><label for="wordInput">Find a word</label><input id="wordInput" placeholder="A name, a word…" maxlength="48" autocomplete="off" spellcheck="false" aria-describedby="alphabetHint"><button type="submit">Find</button></form><div id="alphabetHint" class="hint">A–Z only · accents, spaces and punctuation are not included.</div><div id="result" style="overflow-wrap:anywhere" hidden aria-live="polite"><p id="wordDate"></p><p id="wordNote"></p><div class="actions"><button id="timeRecord">Save time record</button><button id="calendar">Add to calendar</button><button id="visit">Visit its moment</button><button id="capture">Save this moment</button><button id="printWord">Print this moment</button></div></div></section><div class="bar"><button id="begin">Beginning</button><input id="timeline" aria-label="Timeline" type="range" min="0" max="1" step="0.01" value="1"><button id="dateOpen">Go to a date</button><button id="live">Present</button><button id="pause">Pause</button><span id="time"></span></div><details><summary>A finite alphabet. An endless sequence. +</summary><p>Every finite combination of A–Z has a place in this sequence. The letters continue; meaning belongs to the encounter. A word can hold different lives. Once its moment arrives, anyone may save it.<br>Scroll upward to revisit. Return to the present to follow its unfolding.</p><p>The sequence concatenates A through Z, then AA through ZZ, then every three-letter combination, and onward. Spaces between combinations are omitted. Its mathematical rule has no final entry; this browser study has practical limits. The clock advances from one fixed beginning, including while the page is closed.</p></details></footer>
+<dialog id="dateDialog" aria-labelledby="dateTitle"><h2 id="dateTitle">Go to a date</h2><form id="dateForm"><label for="dateInput">Date and time in UTC</label><input type="datetime-local" id="dateInput" step="0.001" required><p id="dateHelp">Visit any moment from the beginning to the present. Future moments have not arrived yet.</p><p id="dateMessage" role="status"></p><div class="date-actions"><button type="button" id="closeDate">Close</button><button type="submit">Visit moment</button></div></form></dialog>
+<script>
+const EPOCH=1789504846490, SPEED=36, COLS=48;
+const c=document.querySelector('canvas'),ctx=c.getContext('2d'),slider=document.querySelector('#timeline');
+let live=true,position=0,last=0,w,h,dpr,found=null;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduced){live=false;position=count();}
+function count(){return Math.max(0,(Date.now()-EPOCH)/1000*SPEED)}
+function letterAt(index){let n=BigInt(Math.floor(index)),len=1n,power=26n;while(n>=len*power){n-=len*power;len++;power*=26n}const word=n/len,offset=n%len;return String.fromCharCode(65+Number(word/(26n**(len-offset-1n))%26n))}
+function resize(){w=innerWidth;h=innerHeight;dpr=Math.min(devicePixelRatio||1,2);c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
+function draw(){const available=count();if(live)position=available;position=Math.max(0,Math.min(position,available));ctx.clearRect(0,0,w,h);
+const size=w<600?14:19,spacing=size*1.35,cols=Math.max(12,Math.min(COLS,Math.floor((w-60)/spacing))),line=size*2.1;
+const currentRow=Math.floor(position/cols),fraction=(position%cols)/cols,base=h-document.querySelector('footer').getBoundingClientRect().height-35;
+ctx.font=`${size}px "Courier New",monospace`;ctx.textAlign='center';
+for(let row=Math.max(0,currentRow-Math.ceil(h/line));row<=currentRow;row++){const y=base-(currentRow-row+fraction)*line;if(y<95)continue;const alpha=Math.min(1,(y-95)/100);ctx.fillStyle=`rgba(35,35,35,${alpha*.85})`;for(let col=0;col<cols;col++){const i=row*cols+col;if(i>=Math.floor(position))break;const x=w/2+(col-(cols-1)/2)*spacing;if(found&&BigInt(i)>=found.start&&BigInt(i)<found.end){ctx.fillStyle='#222';ctx.fillRect(x-spacing/2,y-size,spacing,size+5);ctx.fillStyle='#f7f6f2';ctx.fillText(letterAt(i),x,y);ctx.fillStyle=`rgba(35,35,35,${alpha*.85})`}else ctx.fillText(letterAt(i),x,y)}}
+slider.max=available;slider.value=position;document.querySelector('#state').textContent=live?'PRESENT':'EARLIER MOMENT';document.querySelector('#time').textContent=new Date(EPOCH+position/SPEED*1000).toLocaleString();document.querySelector('#pause').textContent=live?'Pause':'Resume';updateActions();}
+function frame(t){if(!document.hidden&&t-last>50){draw();last=t}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+slider.oninput=()=>{live=false;position=Number(slider.value);draw()};document.querySelector('#live').onclick=()=>{live=true};document.querySelector('#begin').onclick=()=>{live=false;position=Math.min(count(),26);draw()};document.querySelector('#pause').onclick=()=>{live=!live};
+function scrollByAmount(delta){live=false;position=Math.max(0,Math.min(count(),position+delta));draw()}
+c.addEventListener('wheel',e=>{e.preventDefault();scrollByAmount(e.deltaY*.6)},{passive:false});let touchY;c.onpointerdown=e=>{touchY=e.clientY;c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(touchY!==undefined){scrollByAmount((touchY-e.clientY)*.8);touchY=e.clientY}};c.onpointerup=c.onpointercancel=()=>touchY=undefined;
+addEventListener('keydown',e=>{if(['INPUT','BUTTON','SUMMARY'].includes(e.target.tagName))return;if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();scrollByAmount(e.key==='ArrowUp'?-48:48)}if(e.key==='Home'){live=false;position=26}if(e.key==='End')live=true});
+
+const $=id=>document.getElementById(id);
+function locateWord(word){
+ let rank=0n,total=0n,power=26n;
+ for(let k=1;k<word.length;k++){total+=BigInt(k)*power;power*=26n}
+ for(const char of word)rank=rank*26n+BigInt(char.charCodeAt(0)-65);
+ const start=total+rank*BigInt(word.length),end=start+BigInt(word.length);
+ // Ceiling gives the first whole millisecond by which every letter has appeared.
+ const ms=BigInt(EPOCH)+(end*1000n+BigInt(SPEED)-1n)/BigInt(SPEED);
+ const date=ms<=8640000000000000n?new Date(Number(ms)):null;
+ return {word,start,end,ms,date};
+}
+function arrived(){return found&&found.ms<=BigInt(Date.now())}
+function updateActions(){if(!found)return;$('timeRecord').disabled=false;const past=arrived();$('visit').disabled=!past;$('capture').disabled=!past;$('printWord').disabled=!past;$('calendar').disabled=!found.date||found.date.getUTCFullYear()>9999||past;$('visit').textContent=past?'Visit its moment':'Its moment is still ahead';}
+$('findForm').onsubmit=e=>{
+ e.preventDefault();const raw=$('wordInput').value.trim(),word=raw.toUpperCase();$('result').hidden=false;
+ if(!/^[A-Za-z]+$/.test(raw)){found=null;$('wordDate').textContent='Use the 26 letters A–Z.';$('wordNote').textContent='Accents, spaces and punctuation are not changed automatically. You can choose a spelling using A–Z.';for(const id of ['visit','capture','calendar','printWord','timeRecord'])$(id).disabled=true;return}
+ found=locateWord(word);
+ $('wordDate').textContent=found.date?word+' · '+found.date.toLocaleString(undefined,{dateStyle:'full',timeStyle:'long'}):word+' · '+longWait(found);
+ const years=(found.ms-BigInt(EPOCH))/31557600000n;
+ $('wordNote').textContent='Scheduled full-word appearance, not necessarily its first occurrence across neighbouring combinations. '+(arrived()?'This moment has arrived. Anyone can revisit and save it; words are not reserved or owned.':(years>9999n?'About '+years.toLocaleString()+' years after the beginning. ':'')+'The image becomes available to everyone when this moment arrives.')+(!found.date||found.date.getUTCFullYear()>9999?' Calendar apps cannot schedule this far ahead. Download its time record instead.':'');
+ updateActions();draw();
+};
+function download(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
+function icsDate(d){return d.toISOString().slice(0,19).replace(/[-:]/g,'')+'Z'}
+$('calendar').onclick=()=>{
+ if(!found||$('calendar').disabled)return;
+ const start=new Date(Math.ceil(Number(found.ms)/1000)*1000),end=new Date(start.getTime()+60000);
+ const description='Your word '+found.word+' reaches its scheduled appearance in A Limited Infinity by Avery Lake. Import this event into your calendar. Reminder delivery depends on your calendar settings. Return to the companion to view and save the moment. No word is reserved.';
+ const returnURL=new URL(location.href);returnURL.search='';returnURL.hash='';returnURL.searchParams.set('word',found.word);
+ const lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Avery Lake//A Limited Infinity//EN','CALSCALE:GREGORIAN','BEGIN:VEVENT','UID:'+found.word+'-'+EPOCH+'@averylakeofficial.com','DTSTAMP:'+icsDate(new Date()),'DTSTART:'+icsDate(start),'DTEND:'+icsDate(end),'SUMMARY:'+found.word+' · A Limited Infinity','DESCRIPTION:'+description,'BEGIN:VALARM','TRIGGER:-PT5M','ACTION:DISPLAY','DESCRIPTION:Your word appears in five minutes.','END:VALARM','END:VEVENT','END:VCALENDAR'];
+ if(location.protocol==='https:'&&!['localhost','127.0.0.1'].includes(location.hostname))lines.splice(lines.indexOf('BEGIN:VALARM'),0,'URL:'+returnURL.href);
+ const fold=line=>{const result=[];let chunk='';for(const char of line){if(new TextEncoder().encode(chunk+char).length>73){result.push(chunk);chunk=' '+char}else chunk+=char}result.push(chunk);return result.join('\r\n')};
+ download(new Blob([lines.map(fold).join('\r\n')+'\r\n'],{type:'text/calendar;charset=utf-8'}),found.word+'-a-limited-infinity.ics');
+};
+function visitWord(){if(!arrived())return;live=false;position=Number(found.end);draw()}
+$('visit').onclick=visitWord;
+$('capture').onclick=()=>{
+ if(!arrived())return;visitWord();
+ const out=document.createElement('canvas');out.width=1200;out.height=1500;const g=out.getContext('2d');g.fillStyle='#f7f6f2';g.fillRect(0,0,1200,1500);g.fillStyle='#222';g.font='18px Arial';g.fillText('A LIMITED INFINITY',90,95);g.font='15px Arial';g.fillStyle='#777';g.fillText('Avery Lake',90,127);
+ const cols=32,spacing=30,line=48,end=Number(found.end),firstRow=Math.max(0,Math.floor((end-1)/cols)-20),lastRow=Math.floor((end-1)/cols);
+ g.font='24px "Courier New", monospace';g.textAlign='center';
+ for(let row=firstRow;row<=lastRow;row++)for(let col=0;col<cols;col++){const i=row*cols+col;if(i>=end)break;const x=135+col*spacing,y=260+(row-firstRow)*line,hit=BigInt(i)>=found.start;g.fillStyle=hit?'#222':'#777';if(hit){g.fillRect(x-15,y-25,30,34);g.fillStyle='#f7f6f2'}g.fillText(letterAt(i),x,y)}
+ g.textAlign='left';g.fillStyle='#222';g.font='17px Arial';g.fillText(found.word+' · scheduled appearance',90,1355);g.fillStyle='#777';g.font='15px Arial';g.fillText(found.date.toISOString(),90,1390);g.fillText('Characters '+(found.start+1n)+'–'+found.end+' · A finite alphabet. An endless sequence.',90,1425);
+ out.toBlob(blob=>{if(blob)download(blob,found.word+'-a-limited-infinity.png')},'image/png');
+};
+
+function longWait(f){const seconds=f.end/36n,days=seconds/86400n,hours=seconds%86400n/3600n,minutes=seconds%3600n/60n,secs=seconds%60n;return days.toLocaleString()+' days, '+hours+'h '+minutes+'m '+secs+'s'+(f.end%36n?' + '+(f.end%36n)+'/36 second':'')+' after the beginning'}
+$('timeRecord').onclick=()=>{if(!found)return;download(new Blob(['A LIMITED INFINITY · Avery Lake\nWord: '+found.word+'\nBeginning: '+new Date(EPOCH).toISOString()+'\nAlphabet: A–Z; length-first alphabetical order; concatenated without separators.\nSpeed: 36 characters per second.\nScheduled full-word appearance: '+longWait(found)+'\nCharacter positions (one-based): '+(found.start+1n)+' through '+found.end+'\nThis identifies the designated occurrence, not the earliest incidental match.\nKeep this record with the original artwork HTML. It is not a calendar reminder or ownership certificate.\n'],{type:'text/plain;charset=utf-8'}),found.word+'-time-record.txt')};
+$('printWord').onclick=()=>{
+ if(!arrived())return;visitWord();
+ const end=Number(found.end),cols=32,first=Math.max(0,Math.floor((end-1)/cols)-20),last=Math.floor((end-1)/cols);
+ const parts=['<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1500" viewBox="0 0 1200 1500"><rect width="1200" height="1500" fill="#f7f6f2"/><g fill="#222" font-family="Arial,sans-serif"><text x="90" y="95" font-size="18">A LIMITED INFINITY</text><text x="90" y="127" font-size="15">Avery Lake</text></g><g font-family="Courier New,monospace" font-size="24" text-anchor="middle">'];
+ for(let row=first;row<=last;row++)for(let col=0;col<cols;col++){const i=row*cols+col;if(i>=end)break;const x=135+col*30,y=260+(row-first)*48,hit=BigInt(i)>=found.start;if(hit)parts.push('<rect x="'+(x-15)+'" y="'+(y-25)+'" width="30" height="34" fill="#222"/>');parts.push('<text x="'+x+'" y="'+y+'" fill="'+(hit?'#f7f6f2':'#777')+'">'+letterAt(i)+'</text>')}
+ parts.push('</g><g fill="#777" font-family="Arial,sans-serif" font-size="15"><text x="90" y="1355">'+found.word+' · scheduled appearance</text><text x="90" y="1390">'+found.date.toISOString()+'</text><text x="90" y="1425">Characters '+(found.start+1n)+'–'+found.end+' · A finite alphabet. An endless sequence.</text></g></svg>');
+ download(new Blob(parts,{type:'image/svg+xml;charset=utf-8'}),found.word+'-print.svg');
+};
+
+const requested=new URLSearchParams(location.search).get('word');if(requested&&/^[A-Za-z]{1,48}$/.test(requested)){$('wordInput').value=requested;$('findForm').requestSubmit();}
+
+const dateDialog=document.getElementById('dateDialog'),dateInput=document.getElementById('dateInput'),dateMessage=document.getElementById('dateMessage');
+function utcInput(ms){return new Date(ms).toISOString().slice(0,23)}
+document.getElementById('dateOpen').onclick=()=>{dateInput.min=utcInput(EPOCH);dateInput.max=utcInput(Math.max(EPOCH,Date.now()));dateInput.value=utcInput(EPOCH+position/SPEED*1000);dateMessage.textContent='Beginning: '+new Date(EPOCH).toISOString();dateDialog.showModal()};
+document.getElementById('closeDate').onclick=()=>dateDialog.close();
+function visitDate(ms){if(!Number.isFinite(ms)||ms<EPOCH)return 'Choose a moment at or after the beginning.';if(ms>Date.now())return 'That moment has not arrived yet.';live=false;position=(ms-EPOCH)/1000*SPEED;draw();return ''}
+document.getElementById('dateForm').onsubmit=e=>{e.preventDefault();const value=dateInput.value,ms=Date.parse(value+'Z');const error=visitDate(ms);if(error){dateMessage.textContent=error;return}dateDialog.close()};
+
+</script></html>

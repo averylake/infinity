@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A Limited Infinity — Avery Lake</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f6f2;color:#222;font-family:Arial,sans-serif;overflow:hidden}header{position:absolute;z-index:2;top:28px;left:32px;right:32px;display:flex;justify-content:space-between;align-items:start;font-size:11px;letter-spacing:.08em}h1{font-size:12px;font-weight:400;margin:0 0 8px}small{font-size:10px;color:#888}canvas{display:block;width:100vw;height:100vh;touch-action:none}footer{position:absolute;bottom:0;left:0;right:0;padding:25px 32px;background:linear-gradient(transparent,#f7f6f2 30%);font-size:10px;color:#777}.bar{display:flex;gap:18px;align-items:center;margin-bottom:18px}button{font:inherit;color:inherit;border:0;background:none;padding:10px 0;cursor:pointer}button:hover{color:#111}input{flex:1;min-width:40px;accent-color:#777}#time{min-width:170px;text-align:right}details{max-width:530px;line-height:1.6}summary{cursor:pointer;list-style:none}details p{margin-bottom:0}#state{font-size:10px;color:#888}@media(max-width:600px){header{left:20px;right:20px}footer{padding:20px}.bar{gap:12px;flex-wrap:wrap}#time{width:100%;text-align:left}details{font-size:10px}}
+
+.finder{margin:0 0 14px;border-top:1px solid #deddd8;padding-top:12px;max-width:620px}.finder form{display:flex;align-items:center;gap:14px}.finder input{font:12px Arial,sans-serif;border:0;border-bottom:1px solid #ccc;background:transparent;padding:9px 0;color:#222;width:100%;outline-offset:4px}.finder label{white-space:nowrap}.finder p{line-height:1.6;margin:7px 0}.actions{display:flex;gap:20px;flex-wrap:wrap}button:disabled{opacity:.4;cursor:default}#result[hidden]{display:none}#wordDate{color:#333}footer{max-height:62vh;overflow:auto;background:linear-gradient(transparent,#f7f6f2 18px);padding-top:28px}#wordNote{color:#777}.hint{font-size:9px;color:#888}
+
+dialog{background:#f7f6f2;color:#222;border:1px solid #d8d7d2;padding:28px;width:min(440px,90vw);font:12px/1.6 Arial,sans-serif}dialog::backdrop{background:rgba(247,246,242,.8)}dialog h2{font-size:14px;font-weight:400;margin-top:0}dialog input{width:100%;padding:10px;border:1px solid #ccc;background:transparent;color:#222;font:inherit}dialog .date-actions{display:flex;justify-content:space-between;gap:20px;margin-top:15px}#dateMessage{min-height:2em;color:#666}#dateHelp{color:#777;font-size:11px}
+</style>
+<header><div><h1>A LIMITED INFINITY</h1><small>Avery Lake</small></div><div id="state">PRESENT</div></header>
+<canvas aria-label="An unfolding field of letters. Use the timeline or arrow keys to revisit earlier moments."></canvas>
+<footer><div class="bar"><button id="begin">Beginning</button><input id="timeline" aria-label="Timeline" type="range" min="0" max="1" step="0.01" value="1"><button id="dateOpen">Go to a date</button><button id="live">Present</button><button id="pause">Pause</button><span id="time"></span></div><details><summary>A finite alphabet. An endless sequence. +</summary><p>Every finite combination of A–Z has a place in this sequence. The letters continue; meaning belongs to the encounter.<br>Scroll upward to revisit. Return to the present to follow its unfolding.</p><p>The sequence concatenates A through Z, then AA through ZZ, then every three-letter combination, and onward. Spaces between combinations are omitted. Its mathematical rule has no final entry; this browser study has practical limits. The clock advances from one fixed beginning, including while the page is closed.</p></details></footer>
+<dialog id="dateDialog" aria-labelledby="dateTitle"><h2 id="dateTitle">Go to a date</h2><form id="dateForm"><label for="dateInput">Date and time in UTC</label><input type="datetime-local" id="dateInput" step="0.001" required><p id="dateHelp">Visit any moment from the beginning to the present. Future moments have not arrived yet.</p><p id="dateMessage" role="status"></p><div class="date-actions"><button type="button" id="closeDate">Close</button><button type="submit">Visit moment</button></div></form></dialog>
+<script>
+const EPOCH=1789504846490, SPEED=36, COLS=48;
+const c=document.querySelector('canvas'),ctx=c.getContext('2d'),slider=document.querySelector('#timeline');
+let live=true,position=0,last=0,w,h,dpr,found=null;
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduced){live=false;position=count();}
+function count(){return Math.max(0,(Date.now()-EPOCH)/1000*SPEED)}
+function letterAt(index){let n=BigInt(Math.floor(index)),len=1n,power=26n;while(n>=len*power){n-=len*power;len++;power*=26n}const word=n/len,offset=n%len;return String.fromCharCode(65+Number(word/(26n**(len-offset-1n))%26n))}
+function resize(){w=innerWidth;h=innerHeight;dpr=Math.min(devicePixelRatio||1,2);c.width=w*dpr;c.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
+function draw(){const available=count();if(live)position=available;position=Math.max(0,Math.min(position,available));ctx.clearRect(0,0,w,h);
+const size=w<600?14:19,spacing=size*1.35,cols=Math.max(12,Math.min(COLS,Math.floor((w-60)/spacing))),line=size*2.1;
+const currentRow=Math.floor(position/cols),fraction=(position%cols)/cols,base=h-document.querySelector('footer').getBoundingClientRect().height-35;
+ctx.font=`${size}px "Courier New",monospace`;ctx.textAlign='center';
+for(let row=Math.max(0,currentRow-Math.ceil(h/line));row<=currentRow;row++){const y=base-(currentRow-row+fraction)*line;if(y<95)continue;const alpha=Math.min(1,(y-95)/100);ctx.fillStyle=`rgba(35,35,35,${alpha*.85})`;for(let col=0;col<cols;col++){const i=row*cols+col;if(i>=Math.floor(position))break;const x=w/2+(col-(cols-1)/2)*spacing;if(found&&BigInt(i)>=found.start&&BigInt(i)<found.end){ctx.fillStyle='#222';ctx.fillRect(x-spacing/2,y-size,spacing,size+5);ctx.fillStyle='#f7f6f2';ctx.fillText(letterAt(i),x,y);ctx.fillStyle=`rgba(35,35,35,${alpha*.85})`}else ctx.fillText(letterAt(i),x,y)}}
+slider.max=available;slider.value=position;document.querySelector('#state').textContent=live?'PRESENT':'EARLIER MOMENT';document.querySelector('#time').textContent=new Date(EPOCH+position/SPEED*1000).toLocaleString();document.querySelector('#pause').textContent=live?'Pause':'Resume';}
+function frame(t){if(!document.hidden&&t-last>50){draw();last=t}requestAnimationFrame(frame)}requestAnimationFrame(frame);
+slider.oninput=()=>{live=false;position=Number(slider.value);draw()};document.querySelector('#live').onclick=()=>{live=true};document.querySelector('#begin').onclick=()=>{live=false;position=Math.min(count(),26);draw()};document.querySelector('#pause').onclick=()=>{live=!live};
+function scrollByAmount(delta){live=false;position=Math.max(0,Math.min(count(),position+delta));draw()}
+c.addEventListener('wheel',e=>{e.preventDefault();scrollByAmount(e.deltaY*.6)},{passive:false});let touchY;c.onpointerdown=e=>{touchY=e.clientY;c.setPointerCapture(e.pointerId)};c.onpointermove=e=>{if(touchY!==undefined){scrollByAmount((touchY-e.clientY)*.8);touchY=e.clientY}};c.onpointerup=c.onpointercancel=()=>touchY=undefined;
+addEventListener('keydown',e=>{if(['INPUT','BUTTON','SUMMARY'].includes(e.target.tagName))return;if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();scrollByAmount(e.key==='ArrowUp'?-48:48)}if(e.key==='Home'){live=false;position=26}if(e.key==='End')live=true});
+
+
+const dateDialog=document.getElementById('dateDialog'),dateInput=document.getElementById('dateInput'),dateMessage=document.getElementById('dateMessage');
+function utcInput(ms){return new Date(ms).toISOString().slice(0,23)}
+document.getElementById('dateOpen').onclick=()=>{dateInput.min=utcInput(EPOCH);dateInput.max=utcInput(Math.max(EPOCH,Date.now()));dateInput.value=utcInput(EPOCH+position/SPEED*1000);dateMessage.textContent='Beginning: '+new Date(EPOCH).toISOString();dateDialog.showModal()};
+document.getElementById('closeDate').onclick=()=>dateDialog.close();
+function visitDate(ms){if(!Number.isFinite(ms)||ms<EPOCH)return 'Choose a moment at or after the beginning.';if(ms>Date.now())return 'That moment has not arrived yet.';live=false;position=(ms-EPOCH)/1000*SPEED;draw();return ''}
+document.getElementById('dateForm').onsubmit=e=>{e.preventDefault();const value=dateInput.value,ms=Date.parse(value+'Z');const error=visitDate(ms);if(error){dateMessage.textContent=error;return}dateDialog.close()};
+
+</script></html>

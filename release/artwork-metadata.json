@@ -1,0 +1,14 @@
+{
+  "title": "A Limited Infinity",
+  "artist": "Avery Lake",
+  "year": 2026,
+  "medium": "Self-contained time-based HTML artwork",
+  "epochUTC": "2026-09-15T20:40:46.490Z",
+  "epochMilliseconds": 1789504846490,
+  "charactersPerSecond": 36,
+  "alphabet": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  "sequence": "Concatenated strings ordered by increasing length and lexicographically within each length",
+  "status": "Review candidate; not minted or published",
+  "ownership": "No word reservations or exclusive claims",
+  "searchLimit": 48
+}
